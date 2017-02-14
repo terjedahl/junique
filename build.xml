@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project name="junique" default="rel">
+
+    <condition property="revision" value="${svn.info.rev}" else="UNKNOWN">
+        <isset property="svn.info.rev" />
+    </condition>
+    <condition property="version" value="${svn.tag}" else="rv${revision}">
+        <isset property="svn.tag" />
+    </condition>
+    <condition property="target.zip.dir" value="${target.dir}" else="${basedir}">
+        <isset property="target.dir" />
+    </condition>
+    <property file="${basedir}/build.properties" />    
+
+	<target name="bin">
+		<delete dir="${junique.dirs.bin}" />
+		<mkdir dir="${junique.dirs.bin}" />
+		<javac srcdir="${junique.dirs.src}" destdir="${junique.dirs.bin}" source="1.4" target="1.4" />
+        <copy todir="${junique.dirs.bin}">
+            <fileset dir="${junique.dirs.src}">
+                <exclude name="**/*.java" />
+                <exclude name="**/package.html" />
+            </fileset>
+        </copy>
+	</target>
+
+	<target name="jar" depends="bin">
+		<jar destfile="${junique.files.jar}" basedir="${junique.dirs.bin}" compress="true" />
+	</target>
+
+	<target name="doc">
+		<delete dir="${junique.dirs.api}" />
+		<mkdir dir="${junique.dirs.api}" />
+		<javadoc sourcepath="${junique.dirs.src}" destdir="${junique.dirs.api}" doctitle="junique ${version}" access="protected" author="true" version="true" verbose="true">
+			<package name="it.sauronsoftware.junique.*" />
+		</javadoc>
+	</target>
+
+	<target name="rel" depends="bin,jar,doc">
+		<delete dir="${junique.dirs.tmp}" />
+		<mkdir dir="${junique.dirs.tmp}" />
+		<property name="junique.dirs.rel" value="${junique.dirs.tmp}/junique-${version}" />
+		<mkdir dir="${junique.dirs.rel}" />
+		<copy todir="${junique.dirs.rel}" verbose="true">
+			<fileset dir="${basedir}" includes="examples/**" />
+			<fileset dir="${basedir}" includes="LICENSE.txt" />
+			<fileset dir="${basedir}" includes="README.txt" />
+			<fileset dir="${basedir}" includes="CHANGELOG.txt" />
+			<fileset dir="${basedir}" includes="BUILD.txt" />
+			<fileset dir="${basedir}" includes="build.properties" />
+			<fileset dir="${basedir}" includes="build.xml" />
+			<fileset file="${junique.files.jar}" />
+		</copy>
+		<mkdir dir="${junique.dirs.rel}/src" />
+		<copy todir="${junique.dirs.rel}/src" verbose="true">
+			<fileset dir="${junique.dirs.src}" />
+		</copy>
+		<mkdir dir="${junique.dirs.rel}/doc" />
+		<copy todir="${junique.dirs.rel}/doc" verbose="true">
+			<fileset dir="${junique.dirs.doc}" />
+		</copy>
+		<zip destfile="${junique.files.rel}" basedir="${junique.dirs.tmp}" includes="junique-${version}/**" />
+		<delete dir="${junique.dirs.tmp}" />
+	</target>
+
+</project>

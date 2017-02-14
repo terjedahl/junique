@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Manuale di JUnique 1.0</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+<body>
+<h1>Manuale di JUnique 1.0</h1>
+<ul>
+  <li><a href="#1">Introduzione</a></li>
+  <li><a href="#2">Requisiti</a></li>
+  <li><a href="#3">Installazione</a></li>
+  <li><a href="#4">Javadoc</a></li>
+  <li><a href="#5">Guida rapida</a></li>
+  <li><a href="#6">Strategie per gli ID di lock</a></li>
+  <li><a href="#7">Esempi</a></li>
+</ul>
+<a name="1"></a>
+<p>La libreria JUnique pu&ograve; eseguire operazioni di lock condivise tra pi&ugrave; JVM. E' stata ideata  per impedire che un utente possa avviare contemporaneamente pi&ugrave; istanze della stessa applicazione Java. Inoltre JUnique offre dei canali di comunicazione attraverso i quali pi&ugrave; software Java eseguiti in differenti JVM possono scambiarsi dei messaggi.</p>
+<p>JUnique si basa su un concetto di <em>lock esclusivo extra-JVM relativo all'utente</em>. Immagina di voler impedire che la tua applicazione Java per ambiente desktop possa essere avviata pi&ugrave; di una volta dallo stesso utente. Nel <em>main()</em> dell'applicazione puoi richiedere a JUnique un lock su un certo ID, ad esempio <em>il_nome_della_mia_applicazione</em>. Al primo lancio l'ID sar&agrave; sicuramente disponibile e quindi il lock sar&agrave; stabilito senza problemi. L'ID viene cos&igrave; bloccato. Il lock sull'ID scelto pu&ograve; essere rilasciato esplicitamente dallo stesso software che lo ha imposto, attraverso una chiamata al metodo <em>JUnique.releaseLock()</em>. In caso contrario il lock sar&agrave; rilasciato automaticamente all'arresto della JVM. Finch&eacute; si resta nell'ambito della stessa utenza, nessun software Java eseguito da qualsiasi JVM pu&ograve; ottenere un lock su un ID che &egrave; stato precedentemente bloccato e non &egrave; stato ancora rilasciato. Se lo stesso utente avvia una seconda istanza dell'applicazione mentre la prima &egrave; ancora in esecuzione, questa non riuscir&agrave; a stabilire il lock sull'ID, e JUnique sollever&agrave; una <em>AlreadyLockedException</em>. Questo tipo di eccezione informa l'applicazione del fatto che una sua copia gemella &egrave; gi&agrave; in esecuzione. La seconda istanza, riscontrato ci&ograve;, pu&ograve; pertanto interrompere la sua sequenza di avvio, ma prima di terminare pu&ograve; anche inviare dei messaggi alla gemella attiva con il metodo <em>JUnique.sendMessage()</em>.</p>
+<p>Si faccia attenzione al fatto che i lock di JUnique sono correlati all'utente che esegue l'applicazione: due utenze differenti che accedono insieme allo stesso sistema possono ancora avviare due istanze separate di una stessa applicazione, una per ciascuna utenza.</p>
+<a name="2"></a>
+<h2>Requisiti</h2>
+<p>Per eseguire correttamente la libreria JUnique &egrave; richiesto un Java Runtime Environment J2SE versione 1.4 o successiva.</p>
+<a name="3"></a>
+<h2>Installazione</h2>
+<p>Aggiungi il file JAR di JUnique al classpath della tua applicazione, e potrai automaticamente usare le classi di JUnique.</p>
+<a name="4"></a>
+<h2>Javadoc</h2>
+<p>Ecco la documentazione <a href="api/index.html">javadoc di JUnique</a>.</p>
+<a name="5"></a>
+<h2>Guida rapida </h2>
+<p>Un esempio di metodo <em>main()</em> che impedisce ad una applicazione di avere pi&ugrave; istanze simultaneamente in esecuzione per lo stesso utente:</p>
+<pre>public static void main(String[] args) {
+	String appId = &quot;myapplicationid&quot;;
+	boolean alreadyRunning;
+	try {
+		JUnique.acquireLock(appId);
+		alreadyRunning = false;
+	} catch (AlreadyLockedException e) {
+		alreadyRunning = true;
+	}
+	if (!alreadyRunning) {
+		// Start sequence here
+	}
+}</pre>
+<p>Un esempio con scambio di messaggi e passaggio di argomenti. Gli argomenti ricevuti dall'istanza che sceglie di non avviarsi vengono trasmessi all'istanza attiva prima del termine del metodo:</p>
+<pre>public static void main(String[] args) {
+	String appId = &quot;myapplicationid&quot;;
+	boolean alreadyRunning;
+	try {
+		JUnique.acquireLock(appId, new MessageHandler() {
+			public String handle(String message) {
+				// A brand new argument received! Handle it!
+				return null;
+			}
+		});
+		alreadyRunning = false;
+	} catch (AlreadyLockedException e) {
+		alreadyRunning = true;
+	}
+	if (!alreadyRunning) {
+		// Start sequence here
+	} else {
+		for (int i = 0; i &lt; args.length; i++) {
+			JUnique.sendMessage(appId, args[0]));
+		}
+	}
+}</pre>
+<a name="6"></a>
+<h2>Strategie per gli ID di lock</h2>
+<p>Per evitare potenziali conflitti, &egrave; consigliabile scegliere degli ID di lock  qualificanti per ciascuna applicazione che fa uso di JUnique. Non &egrave; una buona idea scegliere degli ID troppo generici come &quot;notepad&quot;, &quot;chat&quot; o &quot;myapp&quot;. E' meglio usare un ID del tipo &quot;mioNome.miaApplicazione&quot;, e meglio ancora &egrave; usare come ID il nome completo della principale classe dell'applicazione.</p>
+<a name="7"></a>
+<h2>Esempi</h2>
+<p><a href="../examples">Esempi dal mondo reale</a></p>
+</body>
+</html>
