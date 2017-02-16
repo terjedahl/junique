@@ -11,6 +11,7 @@ mvn install:install-file \
  -DgroupId=$GROUP -DartifactId=$ARTIFACT -Dversion=$VERSION \
  -DupdateReleaseInfo=true \
  -Dpackaging=jar \
+ -DpomFile=target/$ARTIFACT-$VERSION.pom \
  -Dfile=target/$ARTIFACT-$VERSION.jar \
  -Djavadoc=target/$ARTIFACT-$VERSION-javadoc.jar \
  -Dsources=target/$ARTIFACT-$VERSION-sources.jar
