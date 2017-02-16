@@ -9,9 +9,15 @@
     <version>1.0.4</version>
     <packaging>jar</packaging>
     <name>JUnique</name>
-    <description>Java library that prevents user from running more than one instances of the same Java application - aka AppMutex</description>
+    <description>Java library that prevents user from running more than one instances of the same Java application - a.k.a. AppMutex</description>
     <url>http://www.sauronsoftware.it/projects/junique/</url>
 
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.4</maven.compiler.source>
+        <maven.compiler.target>1.4</maven.compiler.target>
+    </properties>
 
 
     <licenses>
@@ -30,11 +36,11 @@
         </developer>
     </developers>
 
-    <scm>
-        <connection>scm:git:git@github.com:terjedahl/junique.git</connection>
-        <developerConnection>scm:git:git@github.com:terjedahl/junique.git</developerConnection>
-        <url>git@github.com:terjedahl/junique.git</url>
-    </scm>
+    <!--<scm>-->
+        <!--<connection>scm:git:git@github.com:terjedahl/junique.git</connection>-->
+        <!--<developerConnection>scm:git:git@github.com:terjedahl/junique.git</developerConnection>-->
+        <!--<url>git@github.com:terjedahl/junique.git</url>-->
+    <!--</scm>-->
 
     <build>
         <pluginManagement>
@@ -51,32 +57,33 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
-                    <source>1.4</source>
-                    <target>1.4</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <!--<mainClass>fxlauncher.Launcher</mainClass>-->
-                        </manifest>
-                    </archive>
-                </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.3</version>
+                <version>2.10.4</version>
+                <configuration>
+                    <show>public</show>
+                    <sourcepath>${basedir}/src/main/java</sourcepath>
+                    <source>${maven.compiler.source}</source>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -118,10 +125,5 @@
         </plugins>
     </build>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.4</maven.compiler.source>
-        <maven.compiler.target>1.4</maven.compiler.target>
-    </properties>
 
 </project>

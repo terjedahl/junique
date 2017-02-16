@@ -6,5 +6,11 @@ GROUP=it.sauronsoftware
 ARTIFACT=junique
 VERSION=1.0.4
 
-mvn install:install-file -Dfile=target/$ARTIFACT-$VERSION.jar -DlocalRepositoryPath=maven2 \
--DgroupId=$GROUP -DartifactId=$ARTIFACT -Dversion=$VERSION -Dpackaging=jar
+mvn install:install-file \
+ -DlocalRepositoryPath=maven2 \
+ -DgroupId=$GROUP -DartifactId=$ARTIFACT -Dversion=$VERSION \
+ -DupdateReleaseInfo=true \
+ -Dpackaging=jar \
+ -Dfile=target/$ARTIFACT-$VERSION.jar \
+ -Djavadoc=target/$ARTIFACT-$VERSION-javadoc.jar \
+ -Dsources=target/$ARTIFACT-$VERSION-sources.jar
