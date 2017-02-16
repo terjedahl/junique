@@ -14,11 +14,11 @@ Version 1.0.4 is a precise duplicate of the original 1.0.4, except for adjusted 
 
 ## Documentation
 
-[documentation](doc/manual.en.html)
+[documentation](https://terjedahl.github.io/junique/docs/manual.en.html)
 
-[javadocs](doc/api/index.html)
+[javadocs](https://terjedahl.github.io/junique/docs/api/index.html)
 
-[examples](examples)
+[examples](https://github.com/terjedahl/junique/tree/master/examples)
 
 [original README.txt](README-orig.txt)
 
@@ -54,3 +54,4 @@ In your `pom.xml`, include the following to items - under "repositories" and "de
 </dependencies>
 ```
 
+***
