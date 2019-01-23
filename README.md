@@ -14,9 +14,9 @@ Version 1.0.4 is a precise duplicate of the original 1.0.4, except for adjusted 
 
 ## Documentation
 
-[documentation](https://terjedahl.github.io/junique/docs/manual.en.html)
+[documentation](https://terjedahl.github.io/junique/manual.en.html)
 
-[javadocs](https://terjedahl.github.io/junique/docs/api/index.html)
+[javadocs](https://terjedahl.github.io/junique/api/index.html)
 
 [examples](https://github.com/terjedahl/junique/tree/master/examples)
 
